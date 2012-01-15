@@ -11,6 +11,6 @@ exports.news_pub = function(req, res){
   var user_role=req.param('key')=='123abc'? 'admin': 'operator';
   res.render('news_pub', { 
 	title: 'News Board', 
-	user_role: user_role,
-	news_items:[ "what's up everyone?", "how's last night's sleep", "I have back pain.", "lovely day" ] })
+	user_role: user_role
+  })
 };
