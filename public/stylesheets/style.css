@@ -17,9 +17,28 @@ ul.news_items li {
   margin:0;
   list-style: none;
 }
-input.msg {
-	width:400px;
+body input[type='text'] {
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	-ms-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.6);
+	-webkit-box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.6);
+	-o-box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.6);
+	box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.6);
+	color: #999;
+	background-color: #f0f0f0;
+	width: 588px;
+	font-size: 30px;
+	font-family: Helvetica, sans-serif;
+	padding: 5px;
+	border: 1px solid #bbbbbb;
+	font-weight: 500;
 }
 .ts {
 	color:#777;
 }
+body input[type='text']::-webkit-input-placeholder {
+	color: #aaa; }
