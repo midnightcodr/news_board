@@ -5,8 +5,17 @@
 
 var express = require('express')
   , routes = require('./routes')
-var all_items=[ "what's up everyone?", "how's last night's sleep", "I have back pain.", "lovely day" ];
-
+var all_items_raw=[ "Have fun!" ], all_items={};
+function gg() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"_"+S4()+"_"+S4()+"_"+S4()+"_"+S4()+S4()+S4());
+}
+var all
+for(var i=0;i<all_items_raw.length;i++) {
+	all_items[gg()]=(new Date()).toString()+' '+all_items_raw[i];
+}
 var app = module.exports = express.createServer();
 
 // Configuration
@@ -36,14 +45,13 @@ app.get('/news', routes.news_pub);
 var io=require('socket.io').listen(app);
 app.listen(3000);
 io.sockets.on('connection', function( socket ) {
-	socket.emit( 'news', { items: all_items  } );
+	socket.emit( 'news', all_items );
 	socket.on('newmsg', function(d) {
 		var m=(new Date()).toString()+' '+d.msg;
-		var o={msg: m};
-		all_items.push(m);
-		socket.emit('newitem',o );
-		socket.broadcast.emit('newitem',o );
-		//io.sockets.broadcast.emit('newitem', o); 
+		var tmp_id=gg();
+		all_items[tmp_id]=m;
+		socket.emit('newitem', [tmp_id, m]);
+		socket.broadcast.emit('newitem',[tmp_id, m]);
 	});
 	socket.on('delmsg', function(d) {
 		if(d.length<1) return;

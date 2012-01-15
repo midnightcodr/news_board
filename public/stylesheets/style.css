@@ -17,3 +17,6 @@ ul.news_items li {
   margin:0;
   list-style: none;
 }
+input.msg {
+	width:400px;
+}

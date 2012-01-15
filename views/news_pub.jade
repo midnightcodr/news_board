@@ -1,7 +1,6 @@
 h1= title
 script(type="text/javascript")
   var socket = io.connect();
-  var last_index=0;
   socket.on('delitem', function (data) {
     $('.news_items li').each( function() {
       var i=$(this).attr('rel');
@@ -13,15 +12,13 @@ script(type="text/javascript")
 if user_role=='admin'
   script(type="text/javascript")
     socket.on('news', function (data) {
-      $.each( data.items, function(i, ele) {  
-        if(!ele) { return true; }
-        $('.news_items').append('<li rel="'+last_index+'"><input rel="'+last_index+'" type="checkbox"></input> '+ele+'</li>');
-        last_index++;
+      $.each( data, function(k, v) {  
+        if(!v) { return true; }
+        $('.news_items').append('<li rel="'+k+'"><input rel="'+k+'" type="checkbox"></input> '+v+'</li>');
       });
     });
     socket.on('newitem', function (data) {
-        $('.news_items').append('<li rel="'+last_index+'"><input rel="'+last_index+'" type="checkbox"></input> '+data.msg+'</li>');
-        last_index++;
+        $('.news_items').append('<li rel="'+data[0]+'"><input rel="'+data[0]+'" type="checkbox"></input> '+data[1]+'</li>');
     });
     $(document).ready( function() {
       $('.msg').keypress( function(e) {
@@ -44,19 +41,18 @@ if user_role=='admin'
       } );
     });
   input.msg
-  a.remove_selected(href="#") Remove Selected
+  p
+    a.remove_selected(href="#") Remove Selected
 else
   script(type="text/javascript")
     socket.on('news', function (data) {
-      $.each( data.items, function(i, ele) {  
-        if(!ele) { return true; }
-        $('.news_items').append('<li rel="'+last_index+'">'+ele+'</li>');
-        last_index++;
+      $.each( data, function(k, v) {  
+        if(!v) { return true; }
+        $('.news_items').append('<li rel="'+k+'">'+v+'</li>');
       });
     });
     socket.on('newitem', function (data) {
-      $('.news_items').append('<li rel="'+last_index+'">'+data.msg+'</li>');
-        last_index++;
+      $('.news_items').append('<li rel="'+data[0]+'">'+data[1]+'</li>');
     });
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items
