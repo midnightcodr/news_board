@@ -1,14 +1,27 @@
 h1= title
+script(type="text/javascript")
+  var socket = io.connect();
+  var last_index=0;
+  socket.on('delitem', function (data) {
+    $('.news_items li').each( function() {
+      var i=$(this).attr('rel');
+      if(data.indexOf( i ) != -1) {
+        $(this).remove();
+      }
+    });
+  });
 if user_role=='admin'
-  script
-    var socket = io.connect();
+  script(type="text/javascript")
     socket.on('news', function (data) {
       $.each( data.items, function(i, ele) {  
-        $('.news_items').append('<li><input type="checkbox"></input> '+ele+'</li>');
+        if(!ele) { return true; }
+        $('.news_items').append('<li rel="'+last_index+'"><input rel="'+last_index+'" type="checkbox"></input> '+ele+'</li>');
+        last_index++;
       });
     });
     socket.on('newitem', function (data) {
-        $('.news_items').append('<li><input type="checkbox"></input> '+data.msg+'</li>');
+        $('.news_items').append('<li rel="'+last_index+'"><input rel="'+last_index+'" type="checkbox"></input> '+data.msg+'</li>');
+        last_index++;
     });
     $(document).ready( function() {
       $('.msg').keypress( function(e) {
@@ -18,22 +31,32 @@ if user_role=='admin'
           $(this).val('');
         }
       } );
-      $('.news_items input[type="checkbox"]').click( function() {
-        console.log('going to delete '+$(this).prev().html());
-        alert('going to delete '+$(this).prev().html());
+      $('a.remove_selected').click( function() {
+        var collected=[];
+        $('.news_items input[type="checkbox"]:checked').each( function() {
+          var item=$(this);
+          var i=item.attr('rel');
+          collected.push(i);
+        } );
+        if(collected.length>0) {
+          socket.emit('delmsg', collected);
+        }
       } );
     });
   input.msg
+  a.remove_selected(href="#") Remove Selected
 else
-  script
-    var socket = io.connect();
+  script(type="text/javascript")
     socket.on('news', function (data) {
       $.each( data.items, function(i, ele) {  
-        $('.news_items').append('<li>'+ele+'</li>');
+        if(!ele) { return true; }
+        $('.news_items').append('<li rel="'+last_index+'">'+ele+'</li>');
+        last_index++;
       });
     });
     socket.on('newitem', function (data) {
-      $('.news_items').append('<li>'+data.msg+'</li>');
+      $('.news_items').append('<li rel="'+last_index+'">'+data.msg+'</li>');
+        last_index++;
     });
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items

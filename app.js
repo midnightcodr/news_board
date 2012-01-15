@@ -45,5 +45,13 @@ io.sockets.on('connection', function( socket ) {
 		socket.broadcast.emit('newitem',o );
 		//io.sockets.broadcast.emit('newitem', o); 
 	});
+	socket.on('delmsg', function(d) {
+		if(d.length<1) return;
+		for(var i=0;i<d.length;i++) {
+			delete all_items[d[i]];
+		}
+		socket.emit('delitem', d);
+		socket.broadcast.emit('delitem', d);
+	});
 });
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
