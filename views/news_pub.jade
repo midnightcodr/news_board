@@ -18,7 +18,7 @@ if user_role=='admin'
       });
     });
     socket.on('newitem', function (data) {
-        $('.news_items').append('<li rel="'+data[0]+'"><input rel="'+data[0]+'" type="checkbox"></input> '+data[1]+'</li>');
+        $('.news_items').append( $('<li rel="'+data[0]+'"><input rel="'+data[0]+'" type="checkbox"></input> '+data[1]+'</li>').hide().fadeIn(200));
     });
     $(document).ready( function() {
       $('.msg').keypress( function(e) {
@@ -52,7 +52,7 @@ else
       });
     });
     socket.on('newitem', function (data) {
-      $('.news_items').append('<li rel="'+data[0]+'">'+data[1]+'</li>');
+      $('.news_items').append($('<li rel="'+data[0]+'">'+data[1]+'</li>').hide().fadeIn(200));
     });
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items
