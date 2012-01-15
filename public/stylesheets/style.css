@@ -6,3 +6,14 @@ body {
 a {
   color: #00B7FF;
 }
+ul.news_items {
+  margin: 0;
+  padding:0;
+  list-style: none;
+  float: left;
+}
+ul.news_items li {
+  padding:0;
+  margin:0;
+  list-style: none;
+}

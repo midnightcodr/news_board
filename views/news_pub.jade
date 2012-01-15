@@ -1,5 +1,39 @@
 h1= title
 if user_role=='admin'
-	include news_admin
+  script
+    var socket = io.connect();
+    socket.on('news', function (data) {
+      $.each( data.items, function(i, ele) {  
+        $('.news_items').append('<li><input type="checkbox"></input> '+ele+'</li>');
+      });
+    });
+    socket.on('newitem', function (data) {
+        $('.news_items').append('<li><input type="checkbox"></input> '+data.msg+'</li>');
+    });
+    $(document).ready( function() {
+      $('.msg').keypress( function(e) {
+        var code=e.which||e.keyCode;
+        if(code==13) {
+          socket.emit('newmsg', {msg:$(this).val()});
+          $(this).val('');
+        }
+      } );
+      $('.news_items input[type="checkbox"]').click( function() {
+        console.log('going to delete '+$(this).prev().html());
+        alert('going to delete '+$(this).prev().html());
+      } );
+    });
+  input.msg
+else
+  script
+    var socket = io.connect();
+    socket.on('news', function (data) {
+      $.each( data.items, function(i, ele) {  
+        $('.news_items').append('<li>'+ele+'</li>');
+      });
+    });
+    socket.on('newitem', function (data) {
+      $('.news_items').append('<li>'+data.msg+'</li>');
+    });
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items
