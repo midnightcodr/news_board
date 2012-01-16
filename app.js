@@ -7,7 +7,6 @@ var express = require('express')
   , routes = require('./routes')
   , config = require('./config')
 var all_items_raw=config.init_news, all_items={}, ts_base=0.001;
-console.log(all_items_raw);
 function gg() {
 	return (new Date()).getTime();
 }
@@ -20,6 +19,7 @@ var app = module.exports = express.createServer();
 // Configuration
 
 app.configure(function(){
+  app.set('adminpass', config.adminpass);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.bodyParser());

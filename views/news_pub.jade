@@ -52,6 +52,9 @@ if user_role=='admin'
 					$(this).val('');
 				}
 			} );
+			$('.select_all').click( function() {
+				$('.news_items input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+			});
 			$('a.remove_selected').click( function() {
 				var collected=[];
 				$('.news_items input[type="checkbox"]:checked').each( function() {
@@ -62,11 +65,15 @@ if user_role=='admin'
 				if(collected.length>0) {
 					socket.emit('delmsg', collected);
 				}
+				$('.select_all').prop('checked', false);
 			} );
 		});
 	input.msg(type='text')
 	p
 		a.remove_selected(href="#") Remove Selected
+	p
+		input.select_all(type='checkbox')
+		label Select All
 else
 	script(type="text/javascript")
 		socket.on('news', function (data) {

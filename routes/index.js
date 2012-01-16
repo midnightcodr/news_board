@@ -8,7 +8,7 @@ exports.index = function(req, res){
 };
 
 exports.news_pub = function(req, res){
-  var user_role=req.param('key')=='somepassword'? 'admin': 'operator';
+  var user_role=req.param('key')==req.app.settings.adminpass? 'admin': 'operator';
   res.render('news_pub', { 
 	title: 'News Board', 
 	user_role: user_role
