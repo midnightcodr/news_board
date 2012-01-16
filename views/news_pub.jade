@@ -76,7 +76,7 @@ else
 		});
 		socket.on('newitem', function (data) {
 			var ts='<span class="ts">'+gen_ts(data[0])+'</span> ';
-			$('.news_items').prepend($('<li rel="'+data[0]+'">'+ts+data[1]+'</li>').hide().fadeIn(200));
+			$('.news_items').prepend($('<li rel="'+data[0]+'">'+ts+data[1]+'</li>').hide().fadeIn(300).fadeOut(300).fadeIn(300));
 		});
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items
