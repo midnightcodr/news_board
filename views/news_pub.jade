@@ -5,7 +5,7 @@ script(type="text/javascript")
 		$('.news_items li').each( function() {
 			var i=$(this).attr('rel');
 			if(data.indexOf( i ) != -1) {
-				$(this).remove();
+				$(this).fadeOut( function() { $(this).remove(); } );
 			}
 		});
 	});
