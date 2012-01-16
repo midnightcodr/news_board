@@ -5,13 +5,15 @@
 
 var express = require('express')
   , routes = require('./routes')
-var all_items_raw=[ "Have fun!", "That's what matters" ], all_items={}, ts_base=0;
+  , config = require('./config')
+var all_items_raw=config.init_news, all_items={}, ts_base=0.001;
+console.log(all_items_raw);
 function gg() {
 	return (new Date()).getTime();
 }
-var all
 for(var i=0;i<all_items_raw.length;i++) {
-	all_items[(gg()+(ts_base++)).toString()]=all_items_raw[i];
+	all_items[(gg()+ts_base).toString()]=all_items_raw[i];
+	ts_base+=0.001; // to make the key unique
 }
 var app = module.exports = express.createServer();
 
