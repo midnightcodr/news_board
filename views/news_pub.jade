@@ -9,17 +9,21 @@ script(type="text/javascript")
 			}
 		});
 	});
-	function get_keys( hash, reverse) {
-		var keys=[];
-		// collect the keys from hash
-		$.each( hash, function(k, v) {
-			keys.push(k);
-		} );
-		keys.sort();
-		if(arguments.length>1 && reverse) {
-			keys.reverse();
-		}
-		return keys;
+	function toarr(hash, reverse) {
+		var r=[];
+		$.each( hash, function(k,v) {
+			r.push( [k, v] );
+		});
+		if(arguments.length>0 && reverse) {
+			r.sort( function(a, b) {
+				return b[0]-a[0];
+			} );
+		} else {
+			r.sort( function(a, b) {
+				return a[0]-b[0];
+			} );
+		}	
+		return r;
 	}
 	function gen_ts( ms ) {
 		var d=new Date(parseInt(ms));
@@ -28,10 +32,10 @@ script(type="text/javascript")
 if user_role=='admin'
 	script(type="text/javascript")
 		socket.on('news', function (data) {
-			var keys=get_keys(data, true);
-			$.each(keys, function(i, key) {
-				var v=data[key];
-				if(!v) { return true; }
+			$.each(toarr(data, true), function(i, item) {
+				if(!item) { return true; }
+				var key=item[0];
+				var v=item[1];
 				var ts='<span class="ts">'+gen_ts(key)+'</span> ';
 				$('.news_items').append('<li rel="'+key+'"><input rel="'+key+'" type="checkbox"></input> '+ts+v+'</li>');
 			});
@@ -66,10 +70,10 @@ if user_role=='admin'
 else
 	script(type="text/javascript")
 		socket.on('news', function (data) {
-			var keys=get_keys(data, true);
-			$.each(keys, function(i, key) {
-				var v=data[key];
-				if(!v) { return true; }
+			$.each(toarr(data, true), function(i, item) {
+				if(!item) { return true; }
+				var key=item[0];
+				var v=item[1];
 				var ts='<span class="ts">'+gen_ts(key)+'</span> ';
 				$('.news_items').append('<li rel="'+key+'">'+ts+v+'</li>');
 			});
