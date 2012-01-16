@@ -1,58 +1,82 @@
 h1= title
 script(type="text/javascript")
-  var socket = io.connect();
-  socket.on('delitem', function (data) {
-    $('.news_items li').each( function() {
-      var i=$(this).attr('rel');
-      if(data.indexOf( i ) != -1) {
-        $(this).remove();
-      }
-    });
-  });
+	var socket = io.connect();
+	socket.on('delitem', function (data) {
+		$('.news_items li').each( function() {
+			var i=$(this).attr('rel');
+			if(data.indexOf( i ) != -1) {
+				$(this).remove();
+			}
+		});
+	});
+	function get_keys( hash, reverse) {
+		var keys=[];
+		// collect the keys from hash
+		$.each( hash, function(k, v) {
+			keys.push(k);
+		} );
+		keys.sort();
+		if(arguments.length>1 && reverse) {
+			keys.reverse();
+		}
+		return keys;
+	}
+	function gen_ts( ms ) {
+		var d=new Date(parseInt(ms));
+		return $.format.date(d, 'HH:mm MMM dd, yyyy');
+	}
 if user_role=='admin'
-  script(type="text/javascript")
-    socket.on('news', function (data) {
-      $.each( data, function(k, v) {  
-        if(!v) { return true; }
-        $('.news_items').append('<li rel="'+k+'"><input rel="'+k+'" type="checkbox"></input> '+v+'</li>');
-      });
-    });
-    socket.on('newitem', function (data) {
-        $('.news_items').append( $('<li rel="'+data[0]+'"><input rel="'+data[0]+'" type="checkbox"></input> '+data[1]+'</li>').hide().fadeIn(200));
-    });
-    $(document).ready( function() {
-      $('.msg').keypress( function(e) {
-        var code=e.which||e.keyCode;
-        if(code==13) {
-          socket.emit('newmsg', {msg:$(this).val()});
-          $(this).val('');
-        }
-      } );
-      $('a.remove_selected').click( function() {
-        var collected=[];
-        $('.news_items input[type="checkbox"]:checked').each( function() {
-          var item=$(this);
-          var i=item.attr('rel');
-          collected.push(i);
-        } );
-        if(collected.length>0) {
-          socket.emit('delmsg', collected);
-        }
-      } );
-    });
-  input.msg(type='text')
-  p
-    a.remove_selected(href="#") Remove Selected
+	script(type="text/javascript")
+		socket.on('news', function (data) {
+			var keys=get_keys(data, true);
+			$.each(keys, function(i, key) {
+				var v=data[key];
+				if(!v) { return true; }
+				var ts='<span class="ts">'+gen_ts(key)+'</span> ';
+				$('.news_items').append('<li rel="'+key+'"><input rel="'+key+'" type="checkbox"></input> '+ts+v+'</li>');
+			});
+		});
+		socket.on('newitem', function (data) {
+				var ts='<span class="ts">'+gen_ts(data[0])+'</span> ';
+				$('.news_items').prepend( $('<li rel="'+data[0]+'"><input rel="'+data[0]+'" type="checkbox"></input> '+ts+data[1]+'</li>').hide().fadeIn(200));
+		});
+		$(document).ready( function() {
+			$('.msg').keypress( function(e) {
+				var code=e.which||e.keyCode;
+				if(code==13) {
+					socket.emit('newmsg', {msg:$(this).val()});
+					$(this).val('');
+				}
+			} );
+			$('a.remove_selected').click( function() {
+				var collected=[];
+				$('.news_items input[type="checkbox"]:checked').each( function() {
+					var item=$(this);
+					var i=item.attr('rel');
+					collected.push(i);
+				} );
+				if(collected.length>0) {
+					socket.emit('delmsg', collected);
+				}
+			} );
+		});
+	input.msg(type='text')
+	p
+		a.remove_selected(href="#") Remove Selected
 else
-  script(type="text/javascript")
-    socket.on('news', function (data) {
-      $.each( data, function(k, v) {  
-        if(!v) { return true; }
-        $('.news_items').append('<li rel="'+k+'">'+v+'</li>');
-      });
-    });
-    socket.on('newitem', function (data) {
-      $('.news_items').append($('<li rel="'+data[0]+'">'+data[1]+'</li>').hide().fadeIn(200));
-    });
+	script(type="text/javascript")
+		socket.on('news', function (data) {
+			var keys=get_keys(data, true);
+			$.each(keys, function(i, key) {
+				var v=data[key];
+				if(!v) { return true; }
+				var ts='<span class="ts">'+gen_ts(key)+'</span> ';
+				$('.news_items').append('<li rel="'+key+'">'+ts+v+'</li>');
+			});
+		});
+		socket.on('newitem', function (data) {
+			var ts='<span class="ts">'+gen_ts(data[0])+'</span> ';
+			$('.news_items').prepend($('<li rel="'+data[0]+'">'+ts+data[1]+'</li>').hide().fadeIn(200));
+		});
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items
