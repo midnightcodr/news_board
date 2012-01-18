@@ -32,6 +32,7 @@ script(type="text/javascript")
 if user_role=='admin'
 	script(type="text/javascript")
 		socket.on('news', function (data) {
+			$('.news_items li').remove();
 			$.each(toarr(data, true), function(i, item) {
 				if(!item) { return true; }
 				var key=item[0];
@@ -77,6 +78,7 @@ if user_role=='admin'
 else
 	script(type="text/javascript")
 		socket.on('news', function (data) {
+			$('.news_items li').remove();
 			$.each(toarr(data, true), function(i, item) {
 				if(!item) { return true; }
 				var key=item[0];
