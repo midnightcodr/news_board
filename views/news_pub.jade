@@ -29,6 +29,14 @@ script(type="text/javascript")
 		var d=new Date(parseInt(ms));
 		return $.format.date(d, 'HH:mm MMM dd, yyyy');
 	}
+	function flash_title( msg ) {
+		$.titleAlert('Got news: '+msg, {
+			requireBlur:false,
+			stopOnFocus:false,
+			duration:4000,
+			interval:700
+		});
+	}
 if user_role=='admin'
 	script(type="text/javascript")
 		socket.on('news', function (data) {
@@ -41,8 +49,10 @@ if user_role=='admin'
 			});
 		});
 		socket.on('newitem', function (data) {
-				var ts='<span class="ts">'+gen_ts(data[0])+'</span> ';
-				$('.news_items').prepend( $('<li rel="'+data[0]+'"><input rel="'+data[0]+'" type="checkbox"></input> '+ts+data[1]+'</li>').hide().fadeIn(200));
+				var ts=data[0], news=data[1];
+				var str_ts='<span class="ts">'+gen_ts(ts)+'</span> ';
+				flash_title(news);
+				$('.news_items').prepend( $('<li rel="'+ts+'"><input rel="'+ts+'" type="checkbox"></input> '+str_ts+news+'</li>').hide().fadeIn(200));
 		});
 		$(document).ready( function() {
 			$('.msg').keypress( function(e) {
@@ -86,8 +96,10 @@ else
 			});
 		});
 		socket.on('newitem', function (data) {
-			var ts='<span class="ts">'+gen_ts(data[0])+'</span> ';
-			$('.news_items').prepend($('<li rel="'+data[0]+'">'+ts+data[1]+'</li>').hide().fadeIn(300).fadeOut(300).fadeIn(300));
+			var ts=data[0], news=data[1];
+			var str_ts='<span class="ts">'+gen_ts(ts)+'</span> ';	
+			flash_title(news);
+			$('.news_items').prepend($('<li rel="'+ts+'">'+str_ts+news+'</li>').hide().fadeIn(300).fadeOut(300).fadeIn(300));
 		});
 p Welcome to #{title}, here's a list of What's New:
 ul.news_items
