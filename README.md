@@ -8,3 +8,5 @@
 	npm install --global express
 	npm install --global jade
 	npm install --global sqlite3	# only for sqlite3 branch, os needs to have sqlite and dev library installed
+	cd news_board
+	node app.js
